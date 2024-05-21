@@ -1,0 +1,16 @@
+#carousel {
+    position: relative; /* 相对于自身定位 */
+    height: /* 设置合适的高度 */;
+    width: /* 设置合适的宽度 */;
+    overflow: hidden; /* 隐藏超出容器的内容 */
+}
+
+.carousel-item {
+    position: absolute; /* 绝对定位以堆叠图片 */
+    opacity: 0; /* 初始时隐藏所有图片 */
+    transition: opacity 1s ease-in-out; /* 过渡效果 */
+}
+
+.carousel-item:first-child {
+    opacity: 1; /* 显示第一张图片 */
+}

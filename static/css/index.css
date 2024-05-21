@@ -1,0 +1,387 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 头部 */
+#head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10%;
+    background: whitesmoke;
+}
+
+/* Logo部分 */
+#Logo {
+    margin-left: 5%;
+}
+
+#Logo img {
+    height: 50%;
+    width: 50%;
+}
+
+/* 超链接部分 */
+#Super_link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-right: 20px; /* 增加右外边距 */
+}
+
+
+
+#head_Super_link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+
+
+#head_Super_link .login_or_reg #log_off {
+    color: red;
+}
+
+#head_Super_link img {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+}
+
+#head_Super_link a {
+    text-decoration: none;
+    color: cadetblue;
+
+}
+
+#head_Super_link #login {
+    color: red;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.dropbtn {
+    background-color: white;
+    color: cadetblue;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: cadetblue;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #ddd;
+}
+
+/* 查找 */
+#search {
+    position: relative;
+    width: 100%;
+    height: 20%;
+}
+
+#search_input {
+    position: relative;
+    width: 50%;
+    height: 35%;
+    left: 25%;
+    top: 30%;
+}
+
+#search_input #input {
+    position: relative;
+    float: left;
+    padding: 0.1%;
+    width: 88%;
+    height: 89%;
+    border: 3px solid red;
+}
+
+#search_input input {
+    width: 100%;
+    height: 90%;
+    border: 0;
+    font-family: 隶书;
+    font-size: 2em;
+    outline: none;
+    color: gray;
+}
+
+#search_input #btn {
+    position: relative;
+    float: left;
+    width: 10%;
+    height: 96%;
+    background: red;
+    text-align: center;
+    padding-top: 0.5%;
+    cursor: pointer;
+}
+
+#search_input #btn img {
+    width: 55%;
+    height: 90%;
+}
+
+/* select_advertise */
+#select_advertise {
+    position: relative;
+    width: 100%;
+    height: 75%;
+}
+
+#select_advertise #line {
+    position: relative;
+    background: red;
+    border: 2px solid red;
+}
+
+#select_advertise #context {
+    position: relative;
+    width: 80%;
+    height: 100%;
+    left: 10%;
+}
+
+#select_advertise #left {
+    float: left;
+    width: 20%;
+    height: 99%;
+}
+
+#select_advertise #middle {
+    float: left;
+    width: 58%;
+    height: 99%;
+}
+
+#select_advertise #right {
+    float: left;
+    width: 20%;
+    height: 99%;
+}
+
+#select_advertise #left div {
+    width: 77%;
+    height: 5%;
+    padding: 0.8% 10%;
+    cursor: pointer;
+}
+
+#select_advertise #left #classify {
+    padding: 0;
+    width: 100%;
+    height: 7%;
+    font-family: 宋体;
+    font-size: 25px;
+    text-align: center;
+    background: red;
+    color: white;
+}
+
+#select_advertise #middle #up {
+    width: 100%;
+    height: 60%;
+}
+
+#select_advertise #middle #up img {
+    width: 100%;
+    height: 100%;
+}
+
+#select_advertise #middle #down {
+    width: 100%;
+    height: 40%;
+}
+
+#select_advertise #middle #down img {
+    width: 100%;
+    height: 100%;
+}
+
+#select_advertise #middle #down div {
+    float: left;
+    width: 24.5%;
+    height: 100%;
+}
+
+#select_advertise #right img {
+    width: 100%;
+    height: 100%;
+}
+
+/* second_select */
+#second_select {
+    position: relative;
+    width: 79%;
+    height: 75%;
+    left: 10%;
+    top: 5%;
+}
+
+#second_select #second_select_head {
+    height: 8%;
+    width: 100%;
+    padding: 0;
+}
+
+#second_select #second_select_head img {
+    width: 8%;
+    height: 90%;
+}
+
+#second_select #second_select_line {
+    height: 0;
+    width: 100%;
+    padding: 0;
+    border: 2px solid black;
+}
+
+#second_select > div {
+    float: left;
+    width: 15.9%;
+    height: 44%;
+    padding: 0.3%;
+}
+
+#second_select .photo {
+    width: 100%;
+    height: 70%;
+}
+
+#second_select .photo img {
+    width: 100%;
+    height: 100%;
+}
+
+#second_select .message {
+    text-align: center;
+    font-family: 小篆;
+    width: 100%;
+    height: 30%;
+}
+
+#second_select .now_price {
+    color: red;
+}
+
+#second_select .original_price {
+    color: gray;
+    text-decoration: line-through;
+}
+
+/* foot */
+#foot {
+    position: relative;
+    height: 70%;
+    text-align: center;
+    top: 10%;
+}
+
+#foot_img {
+    height: 13%;
+    width: 100%;
+}
+
+#foot_img img {
+    width: 100%;
+    height: 100%;
+}
+
+#foot_other {
+    position: relative;
+    height: 25%;
+    width: 60%;
+    left: 22%;
+}
+
+#foot_other table {
+    height: 100%;
+    width: 100%;
+}
+
+#foot_other table thead {
+    font-size: 1.4em;
+    color: dimgrey;
+}
+
+#foot_other a {
+    text-decoration: none;
+    color: dimgrey;
+}
+
+#foot #foot_line {
+    position: relative;
+    top: 8%;
+    border: 1px solid grey;
+    background: gray;
+}
+
+#website_navigation {
+    position: relative;
+    width: 50%;
+    height: 8%;
+    left: 25%;
+    top: 12%;
+    margin-bottom: 5%;
+}
+
+#website_navigation div {
+    float: left;
+    margin: 0px 5px;
+}
+
+#website_navigation img {
+    height: 15px;
+    width: 20px;
+}
+
+#website_navigation a {
+    text-decoration: none;
+    color: gray;
+}
+
+#logo {
+    width: 50%;
+    height: 12%;
+    position: relative;
+    left: 25%;
+}
+
+#logo img {
+    width: 100%;
+    height: 100%;
+}
+
+ 

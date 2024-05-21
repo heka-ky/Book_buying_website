@@ -1,0 +1,85 @@
+/* ... 其他样式保持不变 ... */
+
+/* 统一的表单样式 */
+.form-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #c9dec8; /* 边框颜色改为黄绿色 */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold; /* 使标签更突出 */
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c9dec8; /* 输入框边框颜色改为黄绿色 */
+    border-radius: 5px;
+    box-sizing: border-box; /* 确保padding不会增加元素的总宽度 */
+}
+
+.form-container button {
+    margin-top: 10px; /* 添加上边距 */
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #8bc34a; /* 按钮背景色改为较深的黄绿色 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 添加过渡效果 */
+}
+
+.form-container button:hover {
+    background-color: #7cb342; /* 按钮悬停时颜色变深 */
+}
+
+/* 商品列表样式 */
+.product-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.product-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f5f9ec; /* 列表项背景色改为淡黄绿色 */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #c9dec8; /* 列表项边框颜色改为黄绿色 */
+}
+
+.product-list li strong { /* 突出显示ID */
+    font-weight: bold;
+    color: #668b46; /* 字体颜色改为黄绿色 */
+}
+
+.product-list li {
+    margin-bottom: 10px;
+    background-color: #f5f9ec; /* 列表项背景色改为淡黄绿色 */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #c9dec8; /* 列表项边框颜色改为黄绿色 */
+}
+
+/* 额外添加一些细节样式 */
+.form-container input[type="text"]:focus,
+.form-container input[type="number"]:focus {
+    outline: none; /* 移除输入框聚焦时的轮廓 */
+    box-shadow: 0 0 4px #8bc34a; /* 聚焦时添加黄绿色阴影 */
+}
+
+.product-list li:hover {
+    background-color: #e8f1d4; /* 列表项悬停时背景色变淡 */
+}

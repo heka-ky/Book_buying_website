@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product['pname'] }} - 详细信息</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .book-detail {
+            text-align: center;
+        }
+
+        .book-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-info {
+            margin-top: 20px;
+        }
+
+        .now_price {
+            font-size: 20px;
+            color: #f00;
+        }
+
+        .original_price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .purchase-button, .add-to-management-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+
+        .purchase-button:hover, .add-to-management-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-detail">
+        <h1>{{ product['pname'] }}</h1>
+        <div class="book-image">
+            <img src="{{ url_for('static', filename=product['images']) }}" alt="{{ product['pname'] }}">
+        </div>
+        <div class="book-info">
+            <p>价格: <span class="now_price">￥{{ product['new_price'] }}</span> <span class="original_price">{{ product['old_price'] }}</span></p>
+            <p>描述: {{ product['description'] }}</p>
+            <form action="/purchase/{{ product['id'] }}" method="POST">
+                <button class="purchase-button" type="submit">购买</button>
+            </form>
+            <form action="/add_to_management/{{ product['id'] }}" method="POST">
+                <button class="add-to-management-button" type="submit">添加到购物车</button>
+            </form>
+        </div>
+        <div>
+            <a href="{{ url_for('index') }}">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>
