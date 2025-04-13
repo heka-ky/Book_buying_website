@@ -6,7 +6,7 @@ class MysqlUtil():
     def __init__(self):
         host = '127.0.0.1'
         user = 'root'
-        password = '123456'
+        password = '264301'
         database = 'users'
         self.connection = pymysql.connect(host=host, user=user, password=password, db=database)
         self.cursor = self.connection.cursor(pymysql.cursors.DictCursor)

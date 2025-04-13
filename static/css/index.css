@@ -4,8 +4,9 @@ html, body {
     width: 100%;
     height: 100%;
 }
+/* 设置 html 和 body 的基础样式，去除默认边距，铺满整个页面 */
 
-/* 头部 */
+/* ========== 头部区域 ========== */
 #head {
     display: flex;
     align-items: center;
@@ -13,61 +14,70 @@ html, body {
     height: 10%;
     background: whitesmoke;
 }
+/* 头部使用 flex 布局，左右对齐，垂直居中，高度占页面 10%，背景为浅灰色 */
 
-/* Logo部分 */
+/* Logo 部分 */
 #Logo {
     margin-left: 5%;
 }
+/* Logo 距离左边有一定空隙 */
 
 #Logo img {
     height: 50%;
     width: 50%;
 }
+/* Logo 图片缩放为容器的一半大小 */
 
-/* 超链接部分 */
+/* 超链接区域 */
 #Super_link {
     display: flex;
     align-items: center;
     height: 100%;
-    margin-right: 20px; /* 增加右外边距 */
+    margin-right: 20px;
 }
-
-
+/* 超链接部分右对齐、垂直居中 */
 
 #head_Super_link {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: calc(100% + 100px); /* 比原来多出100px空间 */
     justify-content: flex-end;
+    margin-left: -150px;        /* 往左“推出去”一些 */
 }
 
 
+/* 超链接容器右对齐，子元素横向排列 */
 
 #head_Super_link .login_or_reg #log_off {
     color: red;
 }
+/* 登出链接设为红色 */
 
 #head_Super_link img {
     height: 20px;
     width: 20px;
     margin-right: 5px;
 }
+/* 登录图标图片大小及右边距 */
 
 #head_Super_link a {
     text-decoration: none;
     color: cadetblue;
-
 }
+/* 所有链接取消下划线，设为青灰色 */
 
 #head_Super_link #login {
     color: red;
 }
+/* 登录链接设为红色 */
 
+/* 下拉菜单 */
 .dropdown {
     position: relative;
     display: inline-block;
     margin-left: 20px;
 }
+/* 下拉菜单整体结构，靠左有间距 */
 
 .dropbtn {
     background-color: white;
@@ -75,6 +85,7 @@ html, body {
     border: none;
     cursor: pointer;
 }
+/* 下拉按钮样式 */
 
 .dropdown-content {
     display: none;
@@ -84,6 +95,7 @@ html, body {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
+/* 下拉内容初始隐藏，浮动层样式 */
 
 .dropdown-content a {
     color: cadetblue;
@@ -91,25 +103,30 @@ html, body {
     text-decoration: none;
     display: block;
 }
+/* 下拉项链接样式 */
 
 .dropdown-content a:hover {
     background-color: #ddd;
 }
+/* 鼠标悬浮时背景变浅灰 */
 
 .dropdown:hover .dropdown-content {
     display: block;
 }
+/* 悬浮显示下拉内容 */
 
 .dropdown:hover .dropbtn {
     background-color: #ddd;
 }
+/* 悬浮时按钮背景变色 */
 
-/* 查找 */
+/* ========== 搜索区域 ========== */
 #search {
     position: relative;
     width: 100%;
     height: 20%;
 }
+/* 搜索区域占整体 20% 高度 */
 
 #search_input {
     position: relative;
@@ -118,6 +135,7 @@ html, body {
     left: 25%;
     top: 30%;
 }
+/* 搜索框居中显示 */
 
 #search_input #input {
     position: relative;
@@ -127,6 +145,7 @@ html, body {
     height: 89%;
     border: 3px solid red;
 }
+/* 输入框边框为红色 */
 
 #search_input input {
     width: 100%;
@@ -137,6 +156,7 @@ html, body {
     outline: none;
     color: gray;
 }
+/* 输入框文字样式，使用隶书字体 */
 
 #search_input #btn {
     position: relative;
@@ -148,24 +168,28 @@ html, body {
     padding-top: 0.5%;
     cursor: pointer;
 }
+/* 搜索按钮样式，红色背景 */
 
 #search_input #btn img {
     width: 55%;
     height: 90%;
 }
+/* 搜索按钮图标缩放 */
 
-/* select_advertise */
+/* ========== 首页广告区域 ========== */
 #select_advertise {
     position: relative;
     width: 100%;
     height: 75%;
 }
+/* 广告区域整体占页面 75% 高度 */
 
 #select_advertise #line {
     position: relative;
     background: red;
     border: 2px solid red;
 }
+/* 红色横线，视觉分隔 */
 
 #select_advertise #context {
     position: relative;
@@ -173,24 +197,28 @@ html, body {
     height: 100%;
     left: 10%;
 }
+/* 广告内容区域居中，占 80% 宽度 */
+
+#select_advertise #left,
+#select_advertise #middle,
+#select_advertise #right {
+    float: left;
+    height: 99%;
+}
+/* 三栏布局 */
 
 #select_advertise #left {
-    float: left;
     width: 20%;
-    height: 99%;
 }
 
 #select_advertise #middle {
-    float: left;
     width: 58%;
-    height: 99%;
 }
 
 #select_advertise #right {
-    float: left;
     width: 20%;
-    height: 99%;
 }
+/* 各栏宽度比例 */
 
 #select_advertise #left div {
     width: 77%;
@@ -198,6 +226,7 @@ html, body {
     padding: 0.8% 10%;
     cursor: pointer;
 }
+/* 左侧菜单按钮样式 */
 
 #select_advertise #left #classify {
     padding: 0;
@@ -209,39 +238,43 @@ html, body {
     background: red;
     color: white;
 }
+/* 分类标题样式 */
+
+#select_advertise #middle #up,
+#select_advertise #middle #down {
+    width: 100%;
+}
+/* 中间上下图片区 */
 
 #select_advertise #middle #up {
-    width: 100%;
     height: 60%;
 }
 
-#select_advertise #middle #up img {
-    width: 100%;
-    height: 100%;
-}
-
 #select_advertise #middle #down {
-    width: 100%;
     height: 40%;
 }
 
+#select_advertise #middle #up img,
 #select_advertise #middle #down img {
     width: 100%;
     height: 100%;
 }
+/* 中间图片自适应 */
 
 #select_advertise #middle #down div {
     float: left;
     width: 24.5%;
     height: 100%;
 }
+/* 四格布局展示 */
 
 #select_advertise #right img {
     width: 100%;
     height: 100%;
 }
+/* 右侧广告图全宽全高显示 */
 
-/* second_select */
+/* ========== 第二选择区域 ========== */
 #second_select {
     position: relative;
     width: 79%;
@@ -249,17 +282,20 @@ html, body {
     left: 10%;
     top: 5%;
 }
+/* 第二展示区域（比如商品列表） */
 
 #second_select #second_select_head {
     height: 8%;
     width: 100%;
     padding: 0;
 }
+/* 区域标题栏 */
 
 #second_select #second_select_head img {
     width: 8%;
     height: 90%;
 }
+/* 标题图标 */
 
 #second_select #second_select_line {
     height: 0;
@@ -267,6 +303,7 @@ html, body {
     padding: 0;
     border: 2px solid black;
 }
+/* 黑色分隔线 */
 
 #second_select > div {
     float: left;
@@ -274,6 +311,7 @@ html, body {
     height: 44%;
     padding: 0.3%;
 }
+/* 每个商品块样式 */
 
 #second_select .photo {
     width: 100%;
@@ -284,6 +322,7 @@ html, body {
     width: 100%;
     height: 100%;
 }
+/* 图片区域 */
 
 #second_select .message {
     text-align: center;
@@ -291,6 +330,7 @@ html, body {
     width: 100%;
     height: 30%;
 }
+/* 商品文字说明，使用小篆字体 */
 
 #second_select .now_price {
     color: red;
@@ -300,14 +340,16 @@ html, body {
     color: gray;
     text-decoration: line-through;
 }
+/* 价格样式，当前价格红色，原价灰色加删除线 */
 
-/* foot */
+/* ========== 底部区域 ========== */
 #foot {
     position: relative;
     height: 70%;
     text-align: center;
     top: 10%;
 }
+/* 页脚区域样式 */
 
 #foot_img {
     height: 13%;
@@ -318,6 +360,7 @@ html, body {
     width: 100%;
     height: 100%;
 }
+/* 页脚图片横幅 */
 
 #foot_other {
     position: relative;
@@ -330,6 +373,7 @@ html, body {
     height: 100%;
     width: 100%;
 }
+/* 页脚中部表格布局 */
 
 #foot_other table thead {
     font-size: 1.4em;
@@ -340,6 +384,7 @@ html, body {
     text-decoration: none;
     color: dimgrey;
 }
+/* 链接去除下划线，深灰色 */
 
 #foot #foot_line {
     position: relative;
@@ -347,6 +392,7 @@ html, body {
     border: 1px solid grey;
     background: gray;
 }
+/* 页脚分隔线 */
 
 #website_navigation {
     position: relative;
@@ -356,6 +402,7 @@ html, body {
     top: 12%;
     margin-bottom: 5%;
 }
+/* 网站底部导航 */
 
 #website_navigation div {
     float: left;
@@ -371,6 +418,7 @@ html, body {
     text-decoration: none;
     color: gray;
 }
+/* 导航链接图标及样式 */
 
 #logo {
     width: 50%;
@@ -383,5 +431,4 @@ html, body {
     width: 100%;
     height: 100%;
 }
-
- 
+/* 页脚 Logo 居中展示 */

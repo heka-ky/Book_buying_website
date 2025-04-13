@@ -1,11 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import pandas as pd
 from mysql_util import MysqlUtil
-import sys
+from dotenv import load_dotenv
+from spark_ws import SparkChat
+
 app = Flask(__name__)
 app.secret_key = 'mrsoft12345678'  # 设置秘钥
 
-# 数据可视化相关路由
+# 设置你的星火大模型 API 信息
+appid = "8f79b10c"
+api_secret = "YzI1OGRiZTBkZjQ5OTA0NWIzMmNjOTE4"
+api_key = "6adc05b5734fd50f3debd7245796f889"
+Spark_url = "wss://spark-api.xf-yun.com/v1.1/chat"
+domain = "lite"
+
+# 首页 & 商品展示
 @app.route('/')
 def index():
     products = get_products()
@@ -33,11 +42,8 @@ def get_company():
 @app.route('/get_industry', methods=['GET'])
 def get_industry():
     df = pd.read_csv('./csv/data3.csv', encoding="GB2312")
-    industry_type_list = df['industry_type']
-    industry_type_value_list = df['industry_type_value']
-
-    industry_type_list = industry_type_list.tolist()
-    industry_type_value_list = industry_type_value_list.tolist()
+    industry_type_list = df['industry_type'].tolist()
+    industry_type_value_list = df['industry_type_value'].tolist()
     re_data = {
         'industry_type': industry_type_list,
         'industry_type_value': industry_type_value_list,
@@ -45,24 +51,23 @@ def get_industry():
     print(re_data)
     return jsonify(re_data)
 
-# 商品管理相关路由
+# 商品相关函数
 def get_products():
     db = MysqlUtil()
     sql = "SELECT id, pname, images, new_price, old_price FROM products"
-    products = db.fetchall(sql)
-    return products
+    return db.fetchall(sql)
 
 def get_product_by_id(product_id):
     db = MysqlUtil()
     sql = "SELECT id, pname, images, new_price, old_price, description FROM products WHERE id = %s"
     params = (product_id,)
     try:
-        product = db.fetchone(sql, params)
-        return product
+        return db.fetchone(sql, params)
     except Exception as e:
         print(f"查询失败: {e}")
         return None
 
+# 商品管理路由
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
@@ -71,9 +76,8 @@ def add_product():
         old_price = request.form['old_price']
 
         db = MysqlUtil()
-        sql = "INSERT INTO products2 (pname,new_price, old_price) VALUES (%s, %s, %s)"
-        params = (pname, new_price, old_price)
-        db.insert(sql, params)
+        sql = "INSERT INTO products2 (pname, new_price, old_price) VALUES (%s, %s, %s)"
+        db.insert(sql, (pname, new_price, old_price))
         return redirect(url_for('manage_products'))
     else:
         return render_template('add_product.html')
@@ -94,9 +98,7 @@ def add_to_management(product_id):
 def delete_product():
     product_id = request.form['product_id']
     db = MysqlUtil()
-    sql = "DELETE FROM products2 WHERE id = %s"
-    params = (product_id,)
-    db.execute(sql, params)
+    db.execute("DELETE FROM products2 WHERE id = %s", (product_id,))
     return redirect(url_for('manage_products'))
 
 @app.route('/search_product', methods=['GET'])
@@ -104,8 +106,7 @@ def search_product():
     search_query = request.args.get('search_query')
     db = MysqlUtil()
     sql = "SELECT id, pname, new_price FROM products2 WHERE pname LIKE %s"
-    params = ('%' + search_query + '%',)
-    products = db.fetchall(sql, params)
+    products = db.fetchall(sql, ('%' + search_query + '%',))
     return render_template('manage_products.html', products=products)
 
 @app.route('/manage_products')
@@ -123,22 +124,22 @@ def book_detail(book_id):
     else:
         return "Product not found", 404
 
-@app.route('/login')
-def Login():
-    return render_template("Login.html")
+# 聊天接口
+@app.route('/chitchatting')
+def chitchatting():
+    return render_template('chitchatting.html')
 
-@app.route('/manage')
-def Manage():
-    return render_template("Manage_Login.html")
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.json.get('message')
+    if not user_input:
+        return jsonify({'error': 'No input'}), 400
 
-@app.route('/personal')
-def Personal():
-    return render_template("Personal_center.html")
+    spark = SparkChat(appid, api_secret, api_key, Spark_url, domain)
+    reply = spark.send(user_input)
+    return jsonify({'reply': reply})
 
-@app.route('/ShoppingCar')
-def ShoppingCar():
-    return render_template("ShoppingCar.html")
-
+# 用户注册
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
@@ -147,12 +148,12 @@ def register():
         upsw = request.form['password']
         db = MysqlUtil()
         sql = "INSERT INTO users(upet_name, uphone, upsw) VALUES (%s, %s, %s)"
-        params = (upet_name, uphone, upsw)
-        db.insert(sql, params)
+        db.insert(sql, (upet_name, uphone, upsw))
         return redirect(url_for('index'))
     else:
         return render_template("Reg.html")
 
+# 用户登录
 @app.route('/Login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
@@ -160,11 +161,9 @@ def login():
         password_candidate = request.form['login_password']
         db = MysqlUtil()
         sql = "SELECT * FROM users WHERE upet_name = %s"
-        params = (upet_name,)
-        result = db.fetchone(sql, params)
+        result = db.fetchone(sql, (upet_name,))
         if result:
-            db_password = result['upsw']
-            if password_candidate == db_password:
+            if password_candidate == result['upsw']:
                 session['logged_in'] = True
                 session['login-username'] = upet_name
                 return redirect(url_for('index'))
@@ -180,5 +179,19 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+# 其它页面
+@app.route('/manage')
+def Manage():
+    return render_template("Manage_Login.html")
+
+@app.route('/Personal')
+def Personal():
+    return render_template("Personal_center.html")
+
+@app.route('/ShoppingCar')
+def ShoppingCar():
+    return render_template("ShoppingCar.html")
+
+# 启动服务
 if __name__ == '__main__':
     app.run(debug=True)

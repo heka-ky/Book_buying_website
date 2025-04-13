@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 知识宇宙 - 在线书城</title>
+    <!-- 整合样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatstyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* 保留原有聊天界面样式 */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: #fff;
+            background-size: cover;
+        }
+        /* 调整导航栏适配新背景 */
+        #Super_link .dropdown-content {
+            background: rgba(255, 255, 255, 0.95);
+        }
+        /* 其他整合样式... */
+    </style>
+</head>
+<body>
+    <!-- 网站导航栏 -->
+    <div id="head">
+        <div id="Logo"><img src="../static/img/Logo.png"></div>
+        <div id="Super_link">
+            <!-- 原有导航结构... -->
+            <div class="a">
+                <a href="{{ url_for('chitchatting') }}" class="active">
+                    <button class="assistant-btn">AI 知识助手</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 聊天主体容器 -->
+    <div class="container">
+        <h1 class="title">📚 AI 知识宇宙</h1>
+        <div class="chat-container">
+            <div id="messages" class="messages">
+                <div class="message ai">
+                    <div class="avatar">🤖</div>
+                    <div class="text">您好！我是书城AI助手，可以为您推荐书籍、解答阅读问题，或聊聊文学知识！</div>
+                </div>
+            </div>
+
+            <div class="history-controls">
+                <button onclick="window.location.href='{{ url_for('index') }}'">返回书城首页</button>
+                <button id="newChat">新建对话</button>
+                <select id="historySelect">
+                    <option value="">选择历史对话</option>
+                </select>
+                <button id="clearChat">清空对话</button>
+                <button id="voiceToggle" class="voice-toggle">开启语音播报</button>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="请输入关于书籍的问题或需求..." />
+                <button id="sendButton">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 网站页脚 -->
+    <div id="foot">
+        <!-- 原有页脚内容... -->
+    </div>
+
+    <!-- 脚本整合 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chatscript.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+    <!-- 语音功能 -->
+    <script>
+        // 原有语音逻辑...
+    </script>
+</body>
+</html>
