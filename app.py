@@ -27,7 +27,7 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'mrsoft12345678')
 load_dotenv()
 
 # DeepSeek API配置
-DEEPSEEK_API_KEY = os.getenv('sk-24de632373044cb399782f7cea7a7251')
+DEEPSEEK_API_KEY = os.getenv('')
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 DEEPSEEK_MODEL = "deepseek-coder"
 
@@ -42,7 +42,7 @@ domain = "lite"
 
 
 # DeepSeek API配置
-DEEPSEEK_API_KEY = "sk-24de632373044cb399782f7cea7a7251"  # 替换为你的DeepSeek API密钥
+DEEPSEEK_API_KEY = ""  # 替换为你的DeepSeek API密钥
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"  # DeepSeek API端点
 
 # 首页 & 商品展示
