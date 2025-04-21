@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图书价格趋势预测</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/price_prediction.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    <div class="prediction-container">
+        <h1>📈 图书价格趋势分析</h1>
+
+        <!-- 查询表单 -->
+        <div class="search-box">
+            <form id="prediction-form">
+                <div class="form-group">
+                    <label for="book-isbn">ISBN编号：</label>
+                    <input type="text" id="book-isbn" placeholder="请输入13位ISBN编号" required>
+                </div>
+                <div class="form-group">
+                    <label for="time-range">预测周期：</label>
+                    <select id="time-range">
+                        <option value="7">最近7天</option>
+                        <option value="30" selected>最近30天</option>
+                        <option value="90">最近3个月</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="platform">比价平台：</label>
+                    <select id="platform" multiple>
+                        <option value="jd" selected>京东</option>
+                        <option value="dangdang">当当</option>
+                        <option value="amazon">亚马逊</option>
+                    </select>
+                </div>
+                <button type="submit" class="predict-btn">开始预测</button>
+            </form>
+        </div>
+
+        <!-- 结果展示区 -->
+        <div class="result-area">
+            <div class="statistics-area">
+                <h2>📊 当前书籍价格分布</h2>
+                <canvas id="bookStatChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>当前价格</h3>
+                    <p id="current-price">--</p>
+                    <div id="platform-prices" class="platform-prices">
+                        <!-- 比价平台价格将在这里动态加载 -->
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>预测趋势</h3>
+                    <p id="trend-indicator">--</p>
+                </div>
+                <div class="stat-card">
+                    <h3>建议操作</h3>
+                    <p id="suggestion">--</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const isbn = document.getElementById('book-isbn').value;
+            const days = document.getElementById('time-range').value;
+
+            axios.post('/api/price/predict', {
+                isbn: isbn,
+                days: days
+            }).then(response => {
+                renderChart(response.data.history, response.data.prediction);
+                updateStats(response.data);
+            }).catch(error => {
+                console.error('预测失败:', error);
+                alert('预测失败，请检查ISBN编号是否正确');
+            });
+        });
+
+        function renderChart(historyData, predictionData) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...historyData.dates, ...predictionData.dates],
+                    datasets: [
+                        {
+                            label: '历史价格',
+                            data: historyData.prices,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        },
+                        {
+                            label: '预测价格',
+                            data: [...Array(historyData.prices.length).fill(null), ...predictionData.prices],
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderDash: [5, 5],
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '价格趋势分析'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ¥${context.raw.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return '¥' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateStats(data) {
+            document.getElementById('current-price').textContent = `¥${data.current_price.toFixed(2)}`;
+
+            const trendElement = document.getElementById('trend-indicator');
+            trendElement.textContent = data.trend === 'up' ? '↑ 上涨' : data.trend === 'down' ? '↓ 下跌' : '→ 平稳';
+            trendElement.className = data.trend === 'up' ? 'up-trend' : data.trend === 'down' ? 'down-trend' : 'neutral-trend';
+
+            document.getElementById('suggestion').textContent = data.suggestion;
+
+            // 更新比价信息
+            const platformPrices = document.getElementById('platform-prices');
+            platformPrices.innerHTML = '';
+            if (data.platform_prices) {
+                Object.entries(data.platform_prices).forEach(([platform, price]) => {
+                    const platformElement = document.createElement('div');
+                    platformElement.className = 'platform-price';
+                    platformElement.innerHTML = `
+                        <span class="platform-name">${platform}</span>
+                        <span class="platform-value">¥${price.toFixed(2)}</span>
+                    `;
+                    platformPrices.appendChild(platformElement);
+                });
+            }
+        }
+    </script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            axios.get('/api/books/statistics')
+                .then(response => {
+                    const data = response.data;
+                    const ctx = document.getElementById('bookStatChart').getContext('2d');
+    
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['低于¥20', '¥20-¥50', '高于¥50'],
+                            datasets: [{
+                                label: '书籍数量',
+                                data: [data.below_20, data.between_20_50, data.above_50],
+                                backgroundColor: ['#4caf50', '#2196f3', '#f44336']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `📘 书籍总数：${data.total_books} ｜ 平均售价：¥${data.avg_price}`
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
+    
+    {% endblock %}
+</body>
+</html>

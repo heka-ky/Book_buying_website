@@ -3,9 +3,35 @@ import pandas as pd
 from mysql_util import MysqlUtil
 from dotenv import load_dotenv
 from spark_ws import SparkChat
+import pandas as pd
+from mysql_util import MysqlUtil
+from dotenv import load_dotenv
+import requests  # 新增requests库用于调用DeepSeek API
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
 app = Flask(__name__)
 app.secret_key = 'mrsoft12345678'  # 设置秘钥
+
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import pandas as pd
+from mysql_util import MysqlUtil
+from dotenv import load_dotenv
+import requests
+import os
+import time
+
+app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'mrsoft12345678')
+
+# 加载环境变量
+load_dotenv()
+
+# DeepSeek API配置
+DEEPSEEK_API_KEY = os.getenv('sk-24de632373044cb399782f7cea7a7251')
+DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
+DEEPSEEK_MODEL = "deepseek-coder"
+
+
 
 # 设置你的星火大模型 API 信息
 appid = "8f79b10c"
@@ -13,6 +39,11 @@ api_secret = "YzI1OGRiZTBkZjQ5OTA0NWIzMmNjOTE4"
 api_key = "6adc05b5734fd50f3debd7245796f889"
 Spark_url = "wss://spark-api.xf-yun.com/v1.1/chat"
 domain = "lite"
+
+
+# DeepSeek API配置
+DEEPSEEK_API_KEY = "sk-24de632373044cb399782f7cea7a7251"  # 替换为你的DeepSeek API密钥
+DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"  # DeepSeek API端点
 
 # 首页 & 商品展示
 @app.route('/')
@@ -71,13 +102,33 @@ def get_product_by_id(product_id):
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
+        # 确保上传目录存在
+        upload_folder = os.path.join(app.root_path, 'static', 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        # 获取表单数据
         pname = request.form['pname']
         new_price = request.form['new_price']
         old_price = request.form['old_price']
+        description = request.form.get('description', '')
 
+        # 处理文件上传
+        image_file = request.files.get('images')
+        image_filename = None
+        if image_file and image_file.filename:
+            # 生成唯一文件名
+            ext = os.path.splitext(image_file.filename)[1]
+            image_filename = f"{pname}_{int(time.time())}{ext}"
+            image_path = os.path.join(upload_folder, image_filename)
+            image_file.save(image_path)
+
+        # 保存到数据库
         db = MysqlUtil()
-        sql = "INSERT INTO products2 (pname, new_price, old_price) VALUES (%s, %s, %s)"
-        db.insert(sql, (pname, new_price, old_price))
+        sql = """INSERT INTO products2 
+                 (pname, images, new_price, old_price, description) 
+                 VALUES (%s, %s, %s, %s, %s)"""
+        db.insert(sql, (pname, image_filename, new_price, old_price, description))
+        
         return redirect(url_for('manage_products'))
     else:
         return render_template('add_product.html')
@@ -100,6 +151,10 @@ def delete_product():
     db = MysqlUtil()
     db.execute("DELETE FROM products2 WHERE id = %s", (product_id,))
     return redirect(url_for('manage_products'))
+
+@app.route('/price_prediction')
+def price_prediction():
+    return render_template('price_prediction.html')
 
 @app.route('/search_product', methods=['GET'])
 def search_product():
@@ -129,15 +184,80 @@ def book_detail(book_id):
 def chitchatting():
     return render_template('chitchatting.html')
 
+# @app.route('/chat', methods=['POST'])
+# def chat():
+#     user_input = request.json.get('message')
+#     if not user_input:
+#         return jsonify({'error': 'No input'}), 400
+#
+#     spark = SparkChat(appid, api_secret, api_key, Spark_url, domain)
+#     reply = spark.send(user_input)
+#     return jsonify({'reply': reply})
+
+
+# @app.route('/chat', methods=['POST'])
+# def chat():
+#     user_input = request.json.get('message')
+#     if not user_input:
+#         return jsonify({'error': 'No input'}), 400
+#
+#     headers = {
+#         "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+#         "Content-Type": "application/json"
+#     }
+#
+#     payload = {
+#         "model": "deepseek-coder",  # 使用DeepSeek Coder模型
+#         "messages": [
+#             {"role": "user", "content": user_input}
+#         ],
+#         "temperature": 0.7
+#     }
+#
+#     try:
+#         response = requests.post(DEEPSEEK_API_URL, json=payload, headers=headers)
+#         response.raise_for_status()
+#         reply = response.json()['choices'][0]['message']['content']
+#         return jsonify({'reply': reply})
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
 @app.route('/chat', methods=['POST'])
 def chat():
+    """处理用户聊天请求并调用DeepSeek API"""
     user_input = request.json.get('message')
     if not user_input:
-        return jsonify({'error': 'No input'}), 400
+        return jsonify({'error': 'No input provided'}), 400
 
-    spark = SparkChat(appid, api_secret, api_key, Spark_url, domain)
-    reply = spark.send(user_input)
-    return jsonify({'reply': reply})
+    try:
+        response = requests.post(
+            DEEPSEEK_API_URL,
+            headers={
+                "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": DEEPSEEK_MODEL,
+                "messages": [{"role": "user", "content": user_input}],
+                "temperature": 0.7,
+                "max_tokens": 1000
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+
+        reply = response.json()['choices'][0]['message']['content']
+        return jsonify({
+            'reply': reply,
+            'usage': response.json().get('usage', {})
+        })
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"API请求失败: {str(e)}")
+        return jsonify({'error': '服务暂时不可用'}), 503
+    except Exception as e:
+        app.logger.error(f"处理聊天时出错: {str(e)}")
+        return jsonify({'error': '内部服务器错误'}), 500
 
 # 用户注册
 @app.route('/register', methods=['GET', 'POST'])
@@ -166,6 +286,9 @@ def login():
             if password_candidate == result['upsw']:
                 session['logged_in'] = True
                 session['login-username'] = upet_name
+                next_page = request.args.get('next')
+                if next_page and next_page.startswith('/'):
+                    return redirect(next_page)
                 return redirect(url_for('index'))
             else:
                 return render_template("Login.html", error="密码错误")
@@ -174,6 +297,59 @@ def login():
     else:
         return render_template("Login.html")
 
+
+@app.route('/api/books/statistics')
+def book_statistics():
+    conn = sqlite3.connect('database.db')  # 替换为你的数据库连接
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT 
+            SUM(CASE WHEN new_price < 20 THEN 1 ELSE 0 END) AS below_20,
+            SUM(CASE WHEN new_price BETWEEN 20 AND 50 THEN 1 ELSE 0 END) AS between_20_50,
+            SUM(CASE WHEN new_price > 50 THEN 1 ELSE 0 END) AS above_50,
+            COUNT(*) AS total_books,
+            ROUND(AVG(new_price), 2) AS avg_price
+        FROM products;
+    """)
+    result = cur.fetchone()
+    conn.close()
+
+    return jsonify({
+        'below_20': result[0],
+        'between_20_50': result[1],
+        'above_50': result[2],
+        'total_books': result[3],
+        'avg_price': result[4]
+    })
+
+
+@app.route('/api/price/predict', methods=['POST'])
+def predict_price():
+    data = request.json
+    isbn = data.get('isbn')
+    days = data.get('days')
+    
+    # 这里添加实际的价格预测和比价逻辑
+    # 模拟数据示例：
+    return jsonify({
+        "history": {
+            "dates": ["2023-01-01", "2023-01-02"],
+            "prices": [45.8, 46.2]
+        },
+        "prediction": {
+            "dates": ["2023-01-03", "2023-01-04"],
+            "prices": [47.0, 47.5]
+        },
+        "current_price": 46.2,
+        "trend": "up",
+        "suggestion": "建议观望，价格可能继续上涨",
+        "platform_prices": {
+            "京东": 45.5,
+            "当当": 46.8,
+            "亚马逊": 47.2
+        }
+    })
 @app.route('/logout')
 def logout():
     session.clear()
@@ -191,6 +367,10 @@ def Personal():
 @app.route('/ShoppingCar')
 def ShoppingCar():
     return render_template("ShoppingCar.html")
+
+#图书管理员
+
+
 
 # 启动服务
 if __name__ == '__main__':

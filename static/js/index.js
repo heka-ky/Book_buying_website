@@ -1,15 +1,14 @@
 $(function(){
 	//检查登录状态
 	isLogin();
-	//跳转至个人中心、购物车、订单页
-	$("#head #Super_link #head_Super_link .a:eq(3)").prevAll().children("a").click(function () {
-		// alert($(this).text());
-		if(isLogin())
-			$(this).attr("href","html/Personal_center.html");
-		else {
-			$(this).attr("href","html/Login.html");
-		}
-	});
+	// 跳转至个人中心、购物车、订单页
+    $("#head #Super_link #head_Super_link .a:eq(3)").prevAll().children("a").click(function () {
+        if (isLogin()) {
+            $(this).attr("href", "/personal_center");  // 修改后的后端路径
+        } else {
+            $(this).attr("href", "/manage_products");  // 修改为 Flask 路由
+        }
+    });
 
 	//注销
 	$("#log_off").click(function () {

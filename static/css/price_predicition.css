@@ -1,0 +1,124 @@
+.prediction-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.search-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group select {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.predict-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.predict-btn:hover {
+    background-color: #45a049;
+}
+
+.chart-container {
+    height: 400px;
+    margin-bottom: 20px;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #666;
+    margin-top: 0;
+}
+
+.up-trend {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.down-trend {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.neutral-trend {
+    color: #FFC107;
+    font-weight: bold;
+}
+
+/* 比价平台样式 */
+.platform-prices {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.platform-price {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.platform-name {
+    color: #666;
+}
+
+.platform-value {
+    font-weight: bold;
+    color: #333;
+}
+
+select[multiple] {
+    height: auto;
+    min-height: 38px;
+}
+.statistics-area {
+    background: #1e1e2f;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 30px;
+    color: white;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+#bookStatChart {
+    max-width: 700px;
+    margin: auto;
+}

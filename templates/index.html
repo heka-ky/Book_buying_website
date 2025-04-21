@@ -36,14 +36,8 @@
         </div>
         <!-- 商品管理 -->
         <div class="a">
-            <div class="dropdown">
-                <button class="dropbtn">书籍管理</button>
-                <div class="dropdown-content">
-                    <a href="/manage_products">添加书籍</a>
-                    <a href="/manage_products">删除书籍</a>
-                    <a href="/manage_products">查询书籍</a>
-                </div>
-            </div>
+            <a href="/manage_products" class="nav-link">书籍管理</a>
+
         </div>
         <!-- 其他导航链接 -->
         <div class="img">
@@ -63,9 +57,14 @@
 		<div class="a"><a href="#">联系客服</a></div>
 		<div class="img"><img src="../static/img/line.png"></div>
 		<div class="a"><a href="#">网站导航</a></div>
+        <div class="img"><img src="../static/img/line.png"></div>
+        <div class="a"><a href="/price_prediction">价格趋势</a></div>
 		  <div>
         <a href="{{ url_for('visualization') }}">
             <button type="button">数据可视化</button>
+            <a href="{{ url_for('price_prediction') }}">
+            <button type="button">价格预测</button>
+        </a>
         </a>
         <div id="assistant">
                     <a href="{{ url_for('chitchatting') }}">

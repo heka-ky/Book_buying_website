@@ -71,54 +71,19 @@ html, body {
 }
 /* 登录链接设为红色 */
 
-/* 下拉菜单 */
-.dropdown {
-    position: relative;
+/* 导航链接样式 */
+.nav-link {
+    color: cadetblue;
+    text-decoration: none;
+    padding: 8px 16px;
     display: inline-block;
     margin-left: 20px;
 }
-/* 下拉菜单整体结构，靠左有间距 */
 
-.dropbtn {
-    background-color: white;
-    color: cadetblue;
-    border: none;
-    cursor: pointer;
-}
-/* 下拉按钮样式 */
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-/* 下拉内容初始隐藏，浮动层样式 */
-
-.dropdown-content a {
-    color: cadetblue;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-/* 下拉项链接样式 */
-
-.dropdown-content a:hover {
+.nav-link:hover {
+    color: red;
     background-color: #ddd;
 }
-/* 鼠标悬浮时背景变浅灰 */
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-/* 悬浮显示下拉内容 */
-
-.dropdown:hover .dropbtn {
-    background-color: #ddd;
-}
-/* 悬浮时按钮背景变色 */
 
 /* ========== 搜索区域 ========== */
 #search {

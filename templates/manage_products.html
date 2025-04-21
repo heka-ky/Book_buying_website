@@ -1,54 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>书籍管理</title>
+    <title>书籍管理系统</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_products_style.css') }}">
 </head>
 <body>
-    <h1>书籍管理</h1>
+    <div class="admin-container">
+        <h1>📚 书籍管理系统</h1>
+        <a href="/" class="back-home-btn">🏠 返回主页</a>
+        <!-- 添加商品表单 -->
+        <form action="/add_product" method="post" enctype="multipart/form-data" class="form-container">
+            <h2>添加新书籍</h2>
+            <div class="form-group">
+                <label for="pname">书籍名称：</label>
+                <input type="text" id="pname" name="pname" required>
+            </div>
+            <div class="form-group">
+                <label for="images">书籍封面：</label>
+                <input type="file" id="images" name="images" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="new_price">售价：</label>
+                <input type="number" id="new_price" name="new_price" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="old_price">原价：</label>
+                <input type="number" id="old_price" name="old_price" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="description">描述：</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">添加书籍</button>
+        </form>
 
-    <!-- 添加商品表单 -->
-    <form action="/add_product" method="post" class="form-container">
-        <h2>添加书籍</h2>
-        <label for="pname">书籍名称：</label>
-        <input type="text" id="pname" name="pname" required><br><br>
-        <label for="new_price">书籍价格：</label>
-        <input type="number" id="new_price" name="new_price" required><br><br>
-        <label for="old_price">原价：</label>
-        <input type="number" id="old_price" name="old_price" required><br><br>
-        <button type="submit">添加书籍</button>
-    </form>
 
-    <hr>
-
-    <!-- 删除商品表单 -->
-    <form action="/delete_product" method="post" class="form-container">
-        <h2>删除书籍</h2>
-        <label for="product_id">书籍ID：</label>
-        <input type="number" id="product_id" name="product_id" required><br><br>
-        <button type="submit">删除书籍</button>
-    </form>
-
-    <hr>
-
-    <!-- 查询商品表单 -->
-    <form action="/search_product" method="get" class="form-container">
-        <h2>查询商品</h2>
-        <label for="search_query">搜索关键词：</label>
-        <input type="text" id="search_query" name="search_query" required><br><br>
-        <button type="submit">查询商品</button>
-    </form>
-
-    <hr>
-
-    <!-- 商品列表 -->
-    <h2>商品列表</h2>
-    <ul class="product-list">
-        {% for product in products %}
-            <li>{{ product.id }} - {{ product.pname }} - {{ product.new_price }}元</li>
-        {% endfor %}
-    </ul>
+        <!-- 商品列表 -->
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.images %}
+                    <img src="{{ url_for('static', filename='uploads/' + product.images) }}" alt="{{ product.pname }}">
+                    {% else %}
+                    <div class="no-image">暂无图片</div>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <h3>{{ product.pname }}</h3>
+                    <div class="price">
+                        <span class="current-price">¥{{ product.new_price }}</span>
+                        <span class="original-price">¥{{ product.old_price }}</span>
+                    </div>
+                    <div class="product-actions">
+                        <form action="/delete_product" method="post" class="delete-form">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="delete-btn">删除</button>
+                        </form>
+                        <a href="/book/{{ product.id }}" class="detail-btn">详情</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>
